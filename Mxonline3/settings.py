@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users',
+    'course',
+    'organization',
+    'operation',
 ]
 
 # 此处重载是为了使我们的UserProfile生效
