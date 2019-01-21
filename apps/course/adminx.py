@@ -2,6 +2,9 @@ import xadmin
 from .models import Course, Lesson, Video, CourseResource
 
 
+# 课程后台管理器
+
+
 class CourseAdmin(object):
     list_display = [
         'name',
@@ -14,6 +17,9 @@ class CourseAdmin(object):
     list_filter = ['name', 'desc', 'detail', 'degree', 'students']
 
 
+# 章节后台管理器
+
+
 class LessonAdmin(object):
     list_display = ['name', 'course', 'add_time']
     search_fields = ['name', 'course']
@@ -22,10 +28,16 @@ class LessonAdmin(object):
     list_filter = ['name', 'course__name', 'add_time']
 
 
+# 视频后台管理器
+
+
 class VideoAdmin(object):
     list_display = ['name', 'lesson', 'add_time']
     search_fields = ['name', 'lesson']
     list_filter = ['name', 'lesson', 'add_time']
+
+
+# 课程资源后台管理器
 
 
 class CourseResourceAdmin(object):
