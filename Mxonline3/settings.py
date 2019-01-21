@@ -22,6 +22,7 @@ print(os.path.join(BASE_DIR,'apps'))
 # 使用os.path.join使当前项目绝对路径与apps进行拼接，返回新路径值
 # 插入0是希望先搜索我们app下东西
 sys.path.insert(0,os.path.join(BASE_DIR,'apps'))
+sys.path.insert(0,os.path.join(BASE_DIR,'extra_apps'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -48,6 +49,9 @@ INSTALLED_APPS = [
     'course',
     'organization',
     'operation',
+    'xadmin',
+    'crispy_forms',
+    'import_export'
 ]
 
 # 此处重载是为了使我们的UserProfile生效

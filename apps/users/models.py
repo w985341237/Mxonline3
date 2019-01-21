@@ -60,11 +60,14 @@ class EmailVerifyRecord(models.Model):
         verbose_name=u'发送类型'
     )
     # 这里的now得去掉()，不去掉会根据编译时间，而不是根据实例化时间
-    send_time = models.DateTimeField(default=datetime.now)
+    send_time = models.DateTimeField(default=datetime.now,verbose_name=u'发送时间')
 
     class Meta:
         verbose_name = '邮箱验证码'
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return '{0}({1})'.format(self.code,self.email)
 
 # 轮播图model
 
