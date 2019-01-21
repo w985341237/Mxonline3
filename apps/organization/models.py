@@ -31,6 +31,9 @@ class CourseOrg(models.Model):
         verbose_name = u'课程机构'
         verbose_name_plural = verbose_name
 
+    def __str__(self):
+        return self.name
+
 # 讲师
 
 
@@ -42,7 +45,7 @@ class Teacher(models.Model):
     )
     name = models.CharField(max_length=50, verbose_name=u'教师名称')
     work_position = models.CharField(max_length=50, verbose_name=u'工作职位')
-    work_years = models.ImageField(default=0, verbose_name=u'工作年限')
+    work_years = models.IntegerField(default=0, verbose_name=u'工作年限')
     work_company = models.CharField(max_length=50, verbose_name=u'就职公司')
     points = models.CharField(max_length=50, verbose_name=u'教学特点')
     click_nums = models.IntegerField(default=0, verbose_name=u'点击数')
@@ -52,6 +55,9 @@ class Teacher(models.Model):
     class Meta:
         verbose_name = u'机构讲师'
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return '{0}讲师：{1}'.format(self.org,self.name)
 
 
 class CityDict(models.Model):
@@ -63,3 +69,6 @@ class CityDict(models.Model):
     class Meta:
         verbose_name = u'城市'
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.name

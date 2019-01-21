@@ -13,12 +13,11 @@ class Course(models.Model):
     )
     degree = models.CharField(
         choices=DEGREE_CHOICES,
-        max_length=2,
+        max_length=4,
         verbose_name=u'难度',
     )
     # 后期会改用富文本
     detail = models.TextField(verbose_name='课程详情')
-    learning_number = models.CharField(max_length=5, verbose_name=u'学习人数')
     # 使用分钟做后台记录（存储最小单位）前台转换
     learn_times = models.IntegerField(default=0, verbose_name=u'学习时长(分钟数）')
     # 保存学习人数：点击开始学习才算
@@ -59,7 +58,7 @@ class Lesson(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.name
+        return '《{0}》课程的章节 >> {1}'.format(self.course, self.name)
 
 # 视频信息
 
