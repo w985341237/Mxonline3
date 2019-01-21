@@ -10,13 +10,18 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
+import sys
 import os
 import pymysql
 pymysql.install_as_MySQLdb()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+print(BASE_DIR)
+print(os.path.join(BASE_DIR,'apps'))
+# 使用os.path.join使当前项目绝对路径与apps进行拼接，返回新路径值
+# 插入0是希望先搜索我们app下东西
+sys.path.insert(0,os.path.join(BASE_DIR,'apps'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -117,15 +122,18 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+# 语音改为中文
+LANGUAGE_CODE = 'zh-hans'
 
-TIME_ZONE = 'UTC'
+# 时区改为上海
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+# 数据库存储使用时间，true时间会被存为UTC的时间
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
