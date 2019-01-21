@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'operation',
     'xadmin',
     'crispy_forms',
-    'import_export'
+    'import_export',
 ]
 
 # 此处重载是为了使我们的UserProfile生效
