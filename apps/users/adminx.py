@@ -5,7 +5,7 @@ from course.models import Course, Lesson, Video, CourseResource
 from operation.models import UserAsk, UserMessage, UserCourse, UserFavorite, CourseComments
 from organization.models import CourseOrg, Teacher, CityDict
 from django.contrib.auth.models import Group, Permission
-from extra_apps.xadmin.models import Log
+from xadmin.models import Log
 
 # 创建admin的管理类，这里不再是继承admin，而是继承object
 
