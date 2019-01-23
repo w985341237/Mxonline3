@@ -18,11 +18,11 @@ pymysql.install_as_MySQLdb()
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 print(BASE_DIR)
-print(os.path.join(BASE_DIR,'apps'))
+print(os.path.join(BASE_DIR, 'apps'))
 # 使用os.path.join使当前项目绝对路径与apps进行拼接，返回新路径值
 # 插入0是希望先搜索我们app下东西
-sys.path.insert(0,os.path.join(BASE_DIR,'apps'))
-sys.path.insert(0,os.path.join(BASE_DIR,'extra_apps'))
+sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
+sys.path.insert(0, os.path.join(BASE_DIR, 'extra_apps'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -77,8 +77,7 @@ ROOT_URLCONF = 'Mxonline3.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
-        ,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -100,11 +99,11 @@ WSGI_APPLICATION = 'Mxonline3.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME':'mxonline3',
-        'USER':'root',
-        'PASSWORD':'password',
-        'PORT':'3306',
-        'HOST':'127.0.0.1',
+        'NAME': 'mxonline3',
+        'USER': 'root',
+        'PASSWORD': 'password',
+        'PORT': '3306',
+        'HOST': '127.0.0.1',
     }
 }
 
@@ -150,8 +149,8 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR,'static')
+    os.path.join(BASE_DIR, 'static')
 ]
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
