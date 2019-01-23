@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/animate.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     {% block cuntom_css %}{% endblock %}
-    <script src="{% static 'js/jquery.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/jquery.min.js' %}" type="text/javascript"></script>
     <script src="{% static 'js/jquery-migrate-1.2.1.min.js' %}" type="text/javascript"></script>
 
 
@@ -43,7 +43,7 @@
                                     </div>
                                 </div>
                             </div>
-                        <a href="{% url 'user:my_message' %}">
+                        <a href="{% url 'users:my_message' %}">
                             <div class="msg-num"><span id="MsgNum">{{ request.user.unread_nums }}</span></div>
                         </a>
                     </div>
@@ -69,7 +69,7 @@
                         </ul>
                     </div>
                     <input id="search_keywords" class="fl" type="text" value="" placeholder="请输入搜索内容"/>
-                    <img class="search_btn fr" id="jsSearchBtn" src="{% static 'image/search_btn.png' %}"/>
+                    <img class="search_btn fr" id="jsSearchBtn" src="{% static 'images/search_btn.png' %}"/>
                 </div>
             </div>
         </div>
@@ -78,7 +78,7 @@
                 <div class="wp">
                     <ul>
                         <li {% ifequal '/' request.path %} class="active" {% endifequal %}><a href="{% url 'index' %}">首页</a></li>
-                        <li {% ifequal 'course' request.path|slice:":7" %} class="active" {% endifequal %}><a class="hot" src="{% static 'images/nav_hot.png' %}"></a></li>
+                        <li {% ifequal 'course' request.path|slice:":7" %} class="active" {% endifequal %}><a href="{% url 'course:list' %}">公开课<img class="hot" src="{% static 'images/nav_hot.png' %}"/></a></li>
                         <li {% ifequal '/org/teacher' request.path|slice:":12" %} class="active" {% endifequal %}><a href="{% url 'org:teacher_list' %}">授课教师</a></li>
                         <li {% ifequal '/org/list' request.path|slice:":9" %} class="active" {% endifequal %}><a href="{% url 'org:org_list' %}">课程机构</a></li>
                     </ul>
@@ -93,7 +93,7 @@
     <section>
         <div class="wp">
             <ul class="crumbs">
-                <li><a href="{% url 'index' %}">首页</a></li>
+                <li><a href="{% url 'index' %}">首页</a>></li>
             </ul>
         </div>
     </section>
@@ -107,9 +107,35 @@
         <div class="wp">
             <ul class="wp">
                 <li class="logo"><a href="{% url 'index' %}"><img src="{% static 'images/footlogo.png' %}"/></a></li>
+                <li class="code"><img src="{% static 'images/code.jpg' %}"/><p class="center">扫描关注微信</p></li>
+                <li class="third"><img src="{% static 'images/tell.png' %}"/><p class="tell">2333333</p><p class="time">周一至周日 9:00-18:00</p></li>
             </ul>
+        </div>
+        <p class="line"></p>
+        <div class="wp clear">
+            <span class="fl">@2019 mxonline.wangning.cn wangning慕课小站-在线学习交流平台 保留所有权利</span>
+            <span class="fr">copyright@ 2019 ICP备案证书号：<a style="color: #717171" href="http://www.miitbeian.gov.cn/">辽ICP备16011333号-1</a></span>
         </div>
     </div>
 </footer>
+
+<section>
+    <ul class="sidebar">
+        <li class="qq">
+            <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2023525077&site=qq&menu=yes"></a>
+        </li>
+        <li class="totop"></li>
+    </ul>
+</section>
+
+<script src="{% static 'js/selectUi.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/deco-common.js' %}" type="text/javascript"></script>
+<script src="{% static '' %}js/plugins/laydate.js" type="text/javascript"></script>
+<script src="{% static 'js/plugins/layer/layer.js' %}"></script>
+<script src="{% static 'js/plugins/queryCity/js/public.js' %}" type="text/javascript>"
+<script src="{% static 'js/unslider.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/plugins/jquery.scrollLoading.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/deco-common.js' %}" type="text/javascript"></script>
+{% block custom_js %}{% endblock %}
 </body>
 </html>
