@@ -41,5 +41,7 @@ def user_login(request):
             # request是要render回去的，这些信息也就随着返回浏览器。完成登录
             login(request,user)
             return render(request,'index.html')
+        # 验证失败，返回错误信息
+        return render(request, 'login.html', {'msg': '用户名或密码错误！'})
     else:
         return render(request,'login.html',{})
