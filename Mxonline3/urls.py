@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path,include
 import xadmin
 from django.views.generic import TemplateView
-from users.views import LoginView
+from users.views import LoginView,RegisterView
 
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),
@@ -25,9 +25,10 @@ urlpatterns = [
     path('',TemplateView.as_view(template_name='index.html'),name="index"),
     path('login/',LoginView.as_view(),name='login'),
     path('logout/',TemplateView.as_view(template_name='logout.html'),name='logout'),
-    path('register/',TemplateView.as_view(template_name='register.html'),name='register'),
+    path('register/',RegisterView.as_view(),name='register'),
     path('forget_pwd/',TemplateView.as_view(template_name='forget_pwd.html'),name='forget_pwd'),
     path('users/',include('users.urls')),
     path('course/',include('course.urls')),
-    path('org/',include('organization.urls'))
+    path('org/',include('organization.urls')),
+    path('captcha/',include('captcha.urls'))
 ]

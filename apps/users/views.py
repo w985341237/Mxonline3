@@ -9,7 +9,7 @@ from django.db.models import Q
 #基于类实现需要继承的View
 from django.views.generic.base import View
 
-from .forms import LoginForm
+from .forms import LoginForm,RegisterForm
 # Create your views here.
 
 # 实现用户名邮箱均可登录
@@ -66,4 +66,20 @@ class LoginView(View):
             return render(request, 'login.html', {'msg': '用户名或密码错误！'})
         # 验证不成功返回登录页面
         return render(request,'login.html',{'login_form':login_form})
+
+
+# 注册视图
+
+
+class RegisterView(View):
+    def get(self,request):
+        # 添加验证码
+        register_form = RegisterForm()
+        return render(request,'register.html',{'register_form':register_form})
+
+    def post(self,request):
+        register_form = RegisterForm()
+        if register_form.is_valid():
+            mobile_num = request.POST.get('account','')
+            email = request.POST.get('email','')
 
