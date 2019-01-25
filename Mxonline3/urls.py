@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path,include
 import xadmin
 from django.views.generic import TemplateView
-from users.views import LoginView,RegisterView
+from users.views import LoginView,RegisterView,ActiveUserView
 
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),
@@ -30,5 +30,7 @@ urlpatterns = [
     path('users/',include('users.urls')),
     path('course/',include('course.urls')),
     path('org/',include('organization.urls')),
-    path('captcha/',include('captcha.urls'))
+    path('captcha/',include('captcha.urls')),
+    # 激活用户url，利用正则表达式提取激活码
+    path('active/(?P<active_code>.*)/',ActiveUserView.as_view,name='user_active')
 ]

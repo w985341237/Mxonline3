@@ -1,15 +1,18 @@
+# encoding = utf-8
+
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
-
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.backends import ModelBackend
-from .models import UserProfile
+from .models import UserProfile,EmailVerifyRecord
 # 并集运算
 from django.db.models import Q
 
 #基于类实现需要继承的View
 from django.views.generic.base import View
-
 from .forms import LoginForm,RegisterForm
+from utils.email_send import send_register_email
+
 # Create your views here.
 
 # 实现用户名邮箱均可登录
@@ -78,8 +81,46 @@ class RegisterView(View):
         return render(request,'register.html',{'register_form':register_form})
 
     def post(self,request):
-        register_form = RegisterForm()
+        register_form = RegisterForm(request.POST)
         if register_form.is_valid():
-            mobile_num = request.POST.get('account','')
-            email = request.POST.get('email','')
+            e_mail = request.POST.get('email','')
+            pass_word = request.POST.get('password','')
 
+            # 发送注册激活邮件
+            send_register_email(e_mail,'register')
+
+            user_profile = UserProfile()
+            user_profile.username = e_mail
+            user_profile.email = e_mail
+
+            # 默认激活状态
+            user_profile.is_active = False
+
+            # make_password(pass_word)会对密码加密进行保存
+            user_profile.password=make_password(pass_word)
+            user_profile.save()
+            pass
+        return render(request,'register.html',{'register_form':register_form,'msg':'邮箱或密码格式错误'})
+
+
+# 激活用户的视图
+
+class ActiveUserView(View):
+    def get(self,request,active_code):
+        # 查询邮箱验证记录是否存在
+        all_record = EmailVerifyRecord.objects.fliter(code=active_code)
+        # 激活form负责给激活跳转进来的人加验证码
+        active_form = ActiveForm(request.GET)
+        # 如果不为空也就是有用户
+        if all_record:
+            for record in all_record:
+                #获取到对应的邮箱
+                email = record.email
+                # 查找到邮箱对应的user
+                user = UserProfile.objects.get(email=email)
+                user.is_active = True
+                user.save()
+                # 激活成功，跳转到登录页面
+                return render(request,'login.html',)
+        # 自己随便输的验证码
+        return render(request,'register.html',{'msg':'您的激活链接无效','active_form':active_form})

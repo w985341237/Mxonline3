@@ -98,10 +98,11 @@
             </div>
             <div class="fl form-box">
                 <div class="tab">
-                    <h2 class="active">手机注册</h2>
+                    <!--<h2 class="active">手机注册</h2>-->
                     <h2>邮箱注册</h2>
                 </div>
-                <div class="tab-form">
+                <!--<div class="tab-form">-->
+                <!--
                     <form id="mobile_register_form" autocomplete="off">
                         <div class="form-group marb20">
                             <label>手&nbsp;机&nbsp;号</label>
@@ -133,7 +134,7 @@
                         <input class="btn btn-green" id="jsMobileRegBtn" type="button" value="注册并登录"/>
                     </form>
                 </div>
-
+                -->
                 <div class="tab-form">
                     <form id="email_register_form" method="post" action="{% url 'register' %}" autocomplete="off">
                         <div class="form-group marb20 {% if register_form.email.errors %} errorput {% endif %}">
@@ -149,7 +150,11 @@
                         {{ register_form.captcha }}
                         {{ active_form.captcha }}
                     </div>
-                    <div class="error btns" id="jsEmailTips">{% for key,error in register.form.errors.items %}{{ error }}{% endfor %}{{ msg }}</div>
+                    <div class="error btns" id="jsEmailTips">
+                        {% for key,error in register.form.errors.items %}
+                            {{ error }}
+                        {% endfor %}
+                        {{ msg }}</div>
                     <div class="auto-box marb8">
 
                     </div>
