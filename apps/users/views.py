@@ -1,5 +1,7 @@
 # encoding = utf-8
 
+import django
+import os
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password
@@ -14,6 +16,8 @@ from .forms import LoginForm,RegisterForm
 from utils.email_send import send_register_email
 
 # Create your views here.
+os.environ.setdefault('DJANGO_SETTING_MODULE', 'Mxonline3.settings')
+django.setup()
 
 # 实现用户名邮箱均可登录
 # 继承ModelBackend类，因为它有方法authenticate,可点进源码查看

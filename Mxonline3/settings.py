@@ -160,7 +160,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # 发送邮件的设置
 EMAIL_HOST = 'smtp.qq.com'
 EMAIL_PORT = 465
-EMAIL_HOST_USER = 'mxonline.wangning.cn'
+EMAIL_HOST_USER = '985341237@qq.com'
 EMAIL_HOST_PASSWORD = 'gvauxnvisrbwbdhc'
-EMAIL_USE_TLS = True
-EMAIL_FROM = 'mxonline.wangning.cn'
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+EMAIL_FROM = '985341237@qq.com'
