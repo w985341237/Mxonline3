@@ -12,7 +12,7 @@ from django.db.models import Q
 
 #基于类实现需要继承的View
 from django.views.generic.base import View
-from .forms import LoginForm,RegisterForm
+from .forms import LoginForm,RegisterForm,ActiveForm
 from utils.email_send import send_register_email
 
 # Create your views here.
