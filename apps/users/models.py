@@ -31,7 +31,9 @@ class UserProfile(AbstractUser):
     image = models.ImageField(
         upload_to='image/%Y/%m',
         default=u'image/default.png',
-        max_length=100
+        max_length=100,
+        verbose_name=u'头像',
+        blank=True
     )
 
     # meta信息，即后台栏目名
@@ -77,7 +79,8 @@ class Banner(models.Model):
     image = models.ImageField(
         upload_to='banner/%Y/%m',
         verbose_name=u'轮播图',
-        max_length=200
+        max_length=200,
+        blank=True,
     )
     url = models.URLField(max_length=200, verbose_name=u'访问地址')
     # 默认index很大靠后，想要靠前修改index值

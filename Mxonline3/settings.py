@@ -15,6 +15,7 @@ import os
 import pymysql
 pymysql.install_as_MySQLdb()
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 print(BASE_DIR)
@@ -155,3 +156,12 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# 发送邮件的设置
+EMAIL_HOST = 'smtp.qq.com'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = '985341237@qq.com'
+EMAIL_HOST_PASSWORD = 'gvauxnvisrbwbdhc'
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+EMAIL_FROM = '985341237@qq.com'
