@@ -44,8 +44,8 @@ urlpatterns = [
     # 激活用户url，利用正则表达式提取激活码
     re_path(
         'active/(?P<active_code>.*)/',
-        ActiveUserView.as_view,
+        ActiveUserView.as_view(),
         name='user_active'),
     # 处理图片显示的url,使用Django自带的serve
-    re_path('media/(?P<path>.*)/', serve, {'document_root': MEDIA_ROOT}),
+    re_path('media/(?P<path>.*)', serve, {"document_root": MEDIA_ROOT}),
 ]
