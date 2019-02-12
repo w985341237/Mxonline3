@@ -17,26 +17,32 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 import xadmin
 from django.views.generic import TemplateView
-from users.views import LoginView, RegisterView, ActiveUserView
+from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, ResetPwdView, ModifyPwdView
 from .settings import MEDIA_ROOT
 from django.views.static import serve  # 上传媒体加载包
 
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),
     # TemplateView.as_view会将template转换为view
+    # 首页
     path('', TemplateView.as_view(template_name='index.html'), name="index"),
+    # 登录
     path('login/', LoginView.as_view(), name='login'),
+    # 登出
     path(
         'logout/',
         TemplateView.as_view(
             template_name='logout.html'),
         name='logout'),
+    # 注册
     path('register/', RegisterView.as_view(), name='register'),
+    # 忘记密码
     path(
         'forget_pwd/',
-        TemplateView.as_view(
-            template_name='forget_pwd.html'),
+        ForgetPwdView.as_view(),
         name='forget_pwd'),
+    # 修改密码
+    path('modify_pwd/',ModifyPwdView.as_view(),name='modify_pwd'),
     path('users/', include('users.urls')),
     path('course/', include('course.urls')),
     path('org/', include('organization.urls')),
@@ -48,4 +54,6 @@ urlpatterns = [
         name='user_active'),
     # 处理图片显示的url,使用Django自带的serve
     re_path('media/(?P<path>.*)', serve, {"document_root": MEDIA_ROOT}),
+    # 重置密码
+    re_path('reset/(?P<active_code>.*)/',ResetPwdView.as_view(),name='reset_pwd')
 ]
