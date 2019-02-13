@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 import xadmin
 from django.views.generic import TemplateView
-from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, ResetPwdView, ModifyPwdView
+from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, ResetPwdView, ModifyPwdView, IndexView
 from .settings import MEDIA_ROOT
 from django.views.static import serve  # 上传媒体加载包
 
@@ -25,7 +25,7 @@ urlpatterns = [
     path('xadmin/', xadmin.site.urls),
     # TemplateView.as_view会将template转换为view
     # 首页
-    path('', TemplateView.as_view(template_name='index.html'), name="index"),
+    path('', IndexView.as_view(), name="index"),
     # 登录
     path('login/', LoginView.as_view(), name='login'),
     # 登出

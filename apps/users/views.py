@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.backends import ModelBackend
-from .models import UserProfile, EmailVerifyRecord
+from .models import UserProfile, EmailVerifyRecord,Banner
 # 并集运算
 from django.db.models import Q
 
@@ -180,26 +180,34 @@ class ResetPwdView(View):
 # 修改密码视图
 
 class ModifyPwdView(View):
-    def post(self,request):
+    def post(self,request,):
         modifypwd_form = ModifyPwdForm(request.POST)
         if modifypwd_form.is_valid():
             pwd1 = request.POST.get('password1','')
             pwd2 = request.POST.get('password2','')
             active_code = request.POST.get('active_code','')
             # email = request.POST.get('email','')
-            # 如果两次密码不一致，返回错误信息
+            # 如果两次密码不一致，返回错误信息这块暂时未能实现
             if pwd1 != pwd2:
-                return render(request,'password_reset.html',{'msg':'密码不一致','email':email})
+                return render(request,'password_reset.html',{'msg':'密码不一致','active_code':active_code})
             # 如果密码一致，找到激活码对应的邮箱
             all_record = EmailVerifyRecord.objects.filter(code=active_code)
             for record in all_record:
                 email = record.email
-            user = UserProfile.objects.get(email=email)
-            # 加密成密文
-            user.password = make_password(pwd2)
-            # 保存
-            user.save()
+                user = UserProfile.objects.get(email=email)
+                # 加密成密文
+                user.password = make_password(pwd2)
+                # 保存
+                user.save()
             return render(request,'login.html',{'msg':'密码修改成功，请重新登录'})
         else:
             email = request.POST.get('email','')
             return render(request,'password_reset.html',{'email':email,'modify_form':modifypwd_form})
+
+
+# 首页视图
+
+class IndexView(View):
+    def get(self,request):
+        all_banner = Banner.objects.all()
+        return render(request,'login.html',{'all_banner':all_banner})
