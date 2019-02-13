@@ -21,6 +21,7 @@ from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, 
 from .settings import MEDIA_ROOT
 from django.views.static import serve  # 上传媒体加载包
 
+
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),
     # TemplateView.as_view会将template转换为view

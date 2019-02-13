@@ -210,4 +210,4 @@ class ModifyPwdView(View):
 class IndexView(View):
     def get(self,request):
         all_banner = Banner.objects.all()
-        return render(request,'login.html',{'all_banner':all_banner})
+        return render(request,'index.html',{'all_banner':all_banner})
