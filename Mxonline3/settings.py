@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'import_export',
     'captcha',
+    'pure_pagination',
 ]
 
 # 此处重载是为了使我们的UserProfile生效
@@ -167,3 +168,13 @@ EMAIL_HOST_PASSWORD = 'gvauxnvisrbwbdhc'
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 EMAIL_FROM = '985341237@qq.com'
+
+# 分页设置的参数
+PAGINATION_SETTINGS = {
+    # 表示总共会显示多少个页数。（包括省略号，两边和中间）
+    'PAGE_RANGE_DISPLAYED':10,
+    # 表示旁边会显示多少个
+    'MARGIN_PAGES_DISPLAYED':2,
+    # 表示输入页不合法是否要跳到第一页
+    'SHOW_FIRST_PAGE_WHEN_INVALID':True
+}
