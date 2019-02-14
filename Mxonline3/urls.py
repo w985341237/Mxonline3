@@ -18,6 +18,7 @@ from django.urls import path, include, re_path
 import xadmin
 from django.views.generic import TemplateView
 from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, ResetPwdView, ModifyPwdView, IndexView
+from organization.views import OrgView
 from .settings import MEDIA_ROOT
 from django.views.static import serve  # 上传媒体加载包
 
@@ -47,6 +48,7 @@ urlpatterns = [
     path('users/', include('users.urls')),
     path('course/', include('course.urls')),
     path('org/', include('organization.urls')),
+    path('org_list',OrgView.as_view(),name='org_list'),
     path('captcha/', include('captcha.urls')),
     # 激活用户url，利用正则表达式提取激活码
     re_path(
