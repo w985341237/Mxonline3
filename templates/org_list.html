@@ -32,10 +32,10 @@
                             <a href="?ct=pxjg&city={{ city_id }}&keywords={{ search_keywords }}">
                                 <span class="{% ifequal category "pxjg" %}active2{% endifequal %}">培训机构</span>
                             </a>
-                            <a href=">ct=gx&city={{ city_id }}&keywords={{ search_keywords }}">
+                            <a href="?ct=gx&city={{ city_id }}&keywords={{ search_keywords }}">
                                 <span class="{% ifequal category "gx" %}active2{% endifequal %}">高校</span>
                             </a>
-                            <a href="ct=gr&city={{ city_id }}&keywords={{ search_keywords }}">
+                            <a href="?ct=gr&city={{ city_id }}&keywords={{ search_keywords }}">
                                 <span class="{% ifequal category "gr" %}active2{% endifequal %}">个人</span>
                             </a>
                         </div>
@@ -44,7 +44,7 @@
                         <h2>所在地区</h2>
                         <div class="more">更多</div>
                         <div class="cont">
-                            <a href=">ct={{ category }}&keywords={{ search_keywords }}">
+                            <a href="?ct={{ category }}&keywords={{ search_keywords }}">
                                 <span class="{% ifequal city_id "" %}active2{% endifequal %}">全部</span>
                             </a>
                             {% for city in all_city %}
