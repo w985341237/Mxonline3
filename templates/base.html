@@ -2,8 +2,11 @@
 <html lang="en">
 {% load staticfiles %}
 <head>
+    <!-- 页面字符编码 -->
     <meta charset="UTF-8">
+    <!-- 双核浏览器启用极速模式(webkit谷歌内核) -->
     <meta name="renderer" content="webkit">
+    <!-- 避免IE使用兼容模式 -->
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
     <title>{% block title %}首页 | wangning慕课小站{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">

@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime
+from organization.models import CourseOrg
 # Create your models here.
 
 
@@ -13,7 +14,7 @@ class Course(models.Model):
     )
     degree = models.CharField(
         choices=DEGREE_CHOICES,
-        max_length=4,
+        max_length=6,
         verbose_name=u'难度',
     )
     # 后期会改用富文本
@@ -26,11 +27,19 @@ class Course(models.Model):
     image = models.ImageField(
         upload_to='courses/%Y/%m',
         verbose_name=u'封面图',
-        max_length=100
+        max_length=100,
+        blank=True
     )
     # 保存点击量，点进页面就算
     click_nums = models.IntegerField(default=0, verbose_name=u'点击量')
     add_time = models.DateTimeField(default=datetime.now, verbose_name=u'添加时间')
+    course_org = models.ForeignKey(
+        CourseOrg,
+        on_delete=models.CASCADE,
+        verbose_name='课程机构',
+        blank=True,
+        null=True,
+    )
 
     class Meta:
         verbose_name = u'课程'
