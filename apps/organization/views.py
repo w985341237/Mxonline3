@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic import View
-from .models import CityDict, CourseOrg
+from organization.models import CityDict, CourseOrg
 from pure_pagination import Paginator, PageNotAnInteger
 from organization.forms import UserAskForm
 # Create your views here.
@@ -56,10 +56,48 @@ class OrgView(View):
         return render(request, 'org_list.html', {
                       'all_city': all_city, 'all_orgs': orgs, 'org_nums': org_nums, 'city_id': city_id, 'category': category, 'hot_orgs': hot_orgs, 'sort': sort})
 
-
+# 机构首页
 class OrgHomeView(View):
-    pass
+    def get(self,request,org_id):
+        # 根据id来获取课程机构
+        course_org = CourseOrg.objects.get(id=int(org_id))
 
+        # 当前机构所有课程,取4个
+        all_courses = course_org.course_set.all()[:4]
+
+        # 当前机构所有讲师，取两个
+        all_teachers = course_org.teacher_set.all()[:2]
+
+        return render(request,'org-detail-homepage.html',{
+            'course_org':course_org,
+            'all_courses':all_courses,
+            'all_teachers':all_teachers,
+        })
+
+# 机构详情页
+class OrgDescView(View):
+    def get(self,request,org_id):
+        course_org = CourseOrg.objects.get(id=int(org_id))
+
+        return render(request,'org-detail-desc.html',{'course_org':course_org})
+
+
+# 机构讲师页
+class OrgTeacherView(View):
+    def get(self,request,org_id):
+        course_org = CourseOrg.objects.get(id=int(org_id))
+        all_teachers = course_org.teacher_set.all()
+
+        return render(request,'org-detail-teachers.html',{'all_teachers':all_teachers})
+
+
+# 机构课程页
+class OrgCourseView(View):
+    def get(self,request,org_id):
+        course_org = CourseOrg.objects.get(id=int(org_id))
+        all_courses = course_org.course_set.all()
+
+        return render(request,'org-detail-course.html',{'all_courses':all_courses})
 
 class AddAskView(View):
     # 用户添加咨询
@@ -76,3 +114,7 @@ class AddAskView(View):
         else:
             # 如果保存失败，则返回json,并将form的错误信息通过msg传递到前端进行显示
             return HttpResponse("{'status':'fail','msg':'您输入的字段有错误'}", content_type='application/json')
+
+
+class AddFavView(View):
+    pass
