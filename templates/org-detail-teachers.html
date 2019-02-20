@@ -9,7 +9,7 @@
     </div>
     <div class="messagelist">
         <div class="butler_list bulter-fav-box">
-            {% for teacher in all_tachers %}
+            {% for teacher in all_teachers %}
                 <dl class="des users">
                     <dt>
                         <a href="{% url 'org:teacher_detail' teacher.id %}">
@@ -23,7 +23,7 @@
                             </a>
                         </h1>
                         <ul class="cont clearfix">
-                            <li class="time">工作年限：<span>{{ teacher.work_years }}</span></li>
+                            <li class="time">工作年限：<span>{{ teacher.work_years }}年</span></li>
                             <li class="c7">课程数：<span>{{ teacher.course_set.count }}</span></li>
                         </ul>
                     </dd>

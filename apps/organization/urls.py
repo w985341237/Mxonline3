@@ -8,7 +8,7 @@ urlpatterns = [
     # 课程机构列表
     path('list/',OrgView.as_view(),name='org_list'),
     path('teacher_list/',TemplateView.as_view(template_name='teacher_list.html'),name='teacher_list'),
-    re_path('org_home/(?P<org_id>\d+)/',OrgHomeView.as_view(),name='org_home'),
+    path('org_home/<int:org_id>/',OrgHomeView.as_view(),name='org_home'),
     path('org_teacher/<int:org_id>/',OrgTeacherView.as_view(),name='org_teacher'),
     path('course/<int:org_id>/',OrgCourseView.as_view(),name='org_course'),
     path('desc/<int:org_id>/',OrgDescView.as_view(),name='org_desc'),

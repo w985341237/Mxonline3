@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic import View
 from organization.models import CityDict, CourseOrg
+from operation.models import UserFavorite
 from pure_pagination import Paginator, PageNotAnInteger
 from organization.forms import UserAskForm
 # Create your views here.
@@ -57,8 +58,10 @@ class OrgView(View):
                       'all_city': all_city, 'all_orgs': orgs, 'org_nums': org_nums, 'city_id': city_id, 'category': category, 'hot_orgs': hot_orgs, 'sort': sort})
 
 # 机构首页
+
+
 class OrgHomeView(View):
-    def get(self,request,org_id):
+    def get(self, request, org_id):
         # 根据id来获取课程机构
         course_org = CourseOrg.objects.get(id=int(org_id))
 
@@ -68,36 +71,51 @@ class OrgHomeView(View):
         # 当前机构所有讲师，取两个
         all_teachers = course_org.teacher_set.all()[:2]
 
-        return render(request,'org-detail-homepage.html',{
-            'course_org':course_org,
-            'all_courses':all_courses,
-            'all_teachers':all_teachers,
+        current_page = 'home'
+
+        return render(request, 'org-detail-homepage.html', {
+            'course_org': course_org,
+            'all_courses': all_courses,
+            'all_teachers': all_teachers,
+            'current_page':current_page,
         })
 
 # 机构详情页
+
+
 class OrgDescView(View):
-    def get(self,request,org_id):
+    def get(self, request, org_id):
         course_org = CourseOrg.objects.get(id=int(org_id))
 
-        return render(request,'org-detail-desc.html',{'course_org':course_org})
+        current_page = 'desc'
+
+        return render(request, 'org-detail-desc.html',
+                      {'course_org': course_org,'current_page':current_page})
 
 
 # 机构讲师页
 class OrgTeacherView(View):
-    def get(self,request,org_id):
+    def get(self, request, org_id):
         course_org = CourseOrg.objects.get(id=int(org_id))
         all_teachers = course_org.teacher_set.all()
 
-        return render(request,'org-detail-teachers.html',{'all_teachers':all_teachers})
+        current_page = 'teacher'
+
+        return render(request, 'org-detail-teachers.html',
+                      {'course_org':course_org,'all_teachers': all_teachers,'current_page':current_page})
 
 
 # 机构课程页
 class OrgCourseView(View):
-    def get(self,request,org_id):
+    def get(self, request, org_id):
         course_org = CourseOrg.objects.get(id=int(org_id))
         all_courses = course_org.course_set.all()
 
-        return render(request,'org-detail-course.html',{'all_courses':all_courses})
+        current_page = 'course'
+
+        return render(request, 'org-detail-course.html',
+                      {'course_org':course_org,'all_courses': all_courses,'current_page':current_page})
+
 
 class AddAskView(View):
     # 用户添加咨询
@@ -113,8 +131,22 @@ class AddAskView(View):
                                 content_type='application/json')
         else:
             # 如果保存失败，则返回json,并将form的错误信息通过msg传递到前端进行显示
-            return HttpResponse("{'status':'fail','msg':'您输入的字段有错误'}", content_type='application/json')
+            return HttpResponse(
+                "{'status':'fail','msg':'您输入的字段有错误'}", content_type='application/json')
+
+# 用户收藏与取消收藏
 
 
 class AddFavView(View):
-    pass
+    def post(self,request):
+        fav_id = request.POST.get('fav_id','')
+        fav_type = request.POST.get('fav_type','')
+
+        if not request.user.is_authenticated:
+            return HttpResponse({'status':'fail','msg':'用户还未登陆'},content_type='application/json')
+        exist_records = UserFavorite.objects.filter(user=request.user,fav_id=int(fav_id),fav_type=fav_type)
+        if exist_records:
+            exist_records.delete()
+            return HttpResponse({'status':'fail','msg':'收藏'},content_type='application/js')
+        else:
+            pass
