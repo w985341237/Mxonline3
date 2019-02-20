@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic import View
-from organization.models import CityDict, CourseOrg
+from organization.models import CityDict, CourseOrg, Teacher
+from course.models import Course
 from operation.models import UserFavorite
 from pure_pagination import Paginator, PageNotAnInteger
 from organization.forms import UserAskForm
@@ -73,11 +74,18 @@ class OrgHomeView(View):
 
         current_page = 'home'
 
+        has_fav = False
+
+        if request.user.is_authenticated:
+            if UserFavorite.objects.filter(user=request.user,fav_id=course_org.id,fav_type=2):
+                has_fav = True
+
         return render(request, 'org-detail-homepage.html', {
             'course_org': course_org,
             'all_courses': all_courses,
             'all_teachers': all_teachers,
             'current_page':current_page,
+            'has_fav':has_fav,
         })
 
 # 机构详情页
@@ -89,8 +97,14 @@ class OrgDescView(View):
 
         current_page = 'desc'
 
+        has_fav = False
+
+        if request.user.is_authenticated:
+            if UserFavorite.objects.filter(user=request.user, fav_id=course_org.id, fav_type=2):
+                has_fav = True
+
         return render(request, 'org-detail-desc.html',
-                      {'course_org': course_org,'current_page':current_page})
+                      {'course_org': course_org,'current_page':current_page,'has_fav':has_fav})
 
 
 # 机构讲师页
@@ -101,8 +115,14 @@ class OrgTeacherView(View):
 
         current_page = 'teacher'
 
+        has_fav = False
+
+        if request.user.is_authenticated:
+            if UserFavorite.objects.filter(user=request.user, fav_id=course_org.id, fav_type=2):
+                has_fav = True
+
         return render(request, 'org-detail-teachers.html',
-                      {'course_org':course_org,'all_teachers': all_teachers,'current_page':current_page})
+                      {'course_org':course_org,'all_teachers': all_teachers,'current_page':current_page,'has_fav':has_fav})
 
 
 # 机构课程页
@@ -113,8 +133,14 @@ class OrgCourseView(View):
 
         current_page = 'course'
 
+        has_fav = False
+
+        if request.user.is_authenticated:
+            if UserFavorite.objects.filter(user=request.user, fav_id=course_org.id, fav_type=2):
+                has_fav = True
+
         return render(request, 'org-detail-course.html',
-                      {'course_org':course_org,'all_courses': all_courses,'current_page':current_page})
+                      {'course_org':course_org,'all_courses': all_courses,'current_page':current_page,'has_fav':has_fav})
 
 
 class AddAskView(View):
@@ -139,14 +165,67 @@ class AddAskView(View):
 
 class AddFavView(View):
     def post(self,request):
-        fav_id = request.POST.get('fav_id','')
-        fav_type = request.POST.get('fav_type','')
+        # 取出fav_id，尽管是字符串类型，后期我们会转换为整型，所以默认为0
+        fav_id = request.POST.get('fav_id',0)
+        # 取出fav_type，尽管是字符串类型，后期我们会转换为整型，所以默认为0
+        fav_type = request.POST.get('fav_type',0)
 
+        # 未收藏时收藏和已收藏时取消
+        # 判断用户是否登录，及时用户没有登录会有一个匿名的user
         if not request.user.is_authenticated:
+            # 未登录时提示未登录，并跳转到登录界面
             return HttpResponse({'status':'fail','msg':'用户还未登陆'},content_type='application/json')
         exist_records = UserFavorite.objects.filter(user=request.user,fav_id=int(fav_id),fav_type=fav_type)
         if exist_records:
+            # 如果记录已经存在，那么用户可以取消收藏
             exist_records.delete()
-            return HttpResponse({'status':'fail','msg':'收藏'},content_type='application/js')
+            # 下面是根据收藏类型来进行删除，同时删除后机构类型对应的喜欢人数也会-1
+            if int(fav_type) == 1:
+                course = Course.objects.get(id=int(fav_id))
+                course.fav_nums -= 1
+                if course.fav_nums < 0:
+                    course.fav_nums = 0
+                course.save()
+            elif int(fav_type) == 2:
+                course_org = CourseOrg.objects.get(id=int(fav_id))
+                course_org.fav_nums -= 1
+                if course_org.fav_nums < 0:
+                    course_org.fav_nums = 0
+                course_org.save()
+            elif int(fav_type) == 3:
+                teacher = Teacher.objects.get(id=int(fav_id))
+                teacher.fav_nums -= 1
+                if teacher.fav_nums < 0:
+                    teacher.fav_nums = 0
+                teacher.save()
+
+            return HttpResponse({'status':'success','msg':'收藏'},content_type='application/json')
         else:
-            pass
+            # 实例化一个对象
+            if int(fav_id)>0 and int(fav_type)>0:
+                user_fav = UserFavorite()
+                user_fav.user = request.user
+                user_fav.fav_id = int(fav_id)
+                user_fav.fav_type = int(fav_type)
+                # 保存到数据库
+                user_fav.save()
+                # 下面是根据收藏类型来进行增加，同时增加记录后机构对应的喜欢人数也会+1
+                if int(fav_type) == 1:
+                    course = Course.objects.get(id=int(fav_id))
+                    course.fav_nums += 1
+                    course.save()
+
+                elif int(fav_type) == 2:
+                    course_org = CourseOrg.objects.get(id=int(fav_id))
+                    course_org.fav_nums += 1
+                    course_org.save()
+
+                elif int(fav_type) == 3:
+                    teacher = Teacher.objects.get(id=int(fav_id))
+                    teacher.fav_nums += 1
+                    teacher.save()
+
+                return HttpResponse({'status':'success','msg':'已收藏'},content_type='application/json')
+            else:
+                # 收藏出错
+                return HttpResponse({'status':'fail','msg':'收藏出错'},content_type='application/json')
