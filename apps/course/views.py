@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views.generic import View
 from course.models import Course
 from pure_pagination import PageNotAnInteger, Paginator, EmptyPage
+from operation.models import UserFavorite
 # Create your views here.
 
 
@@ -43,6 +44,20 @@ class CourseDetailView(View):
         course.click_nums += 1
         course.save()
 
+        # 课程收藏
+        has_fav_course = False
+
+        if request.user.is_authenticated:
+            if UserFavorite.objects.filter(user=request.user,fav_id=course.id,fav_type=1):
+                has_fav_course = True
+
+        # 机构收藏
+        has_fav_org = False
+
+        if request.user.is_authenticated:
+            if UserFavorite.objects.filter(user=request.user, fav_id=course.id, fav_type=2):
+                has_fav_org = True
+
         # 相关课程推荐
         # 去除当前课程的标签
         tag = course.tag
@@ -52,4 +67,4 @@ class CourseDetailView(View):
         else:
             relate_courses = []
 
-        return render(request,'course_detail.html',{'course':course,'relate_courses':relate_courses})
+        return render(request,'course_detail.html',{'course':course,'relate_courses':relate_courses,'has_fav_course':has_fav_course,'has_fav_org':has_fav_org})
