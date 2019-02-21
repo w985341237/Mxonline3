@@ -40,6 +40,20 @@ class Course(models.Model):
         blank=True,
         null=True,
     )
+    # 课程标签
+    tag = models.CharField(max_length=15,verbose_name=u'课程标签',default=u'')
+    # 课程类别
+    category = models.CharField(max_length=20,verbose_name=u'课程类别',default=u'后端开发')
+
+    # 替代标签：course.lesson_set.count
+    # 获取课程章节数
+    #def get_zj_nums(self):
+    #    return self.lesson_set.all().count()
+
+    # 替代标签：course.usercourse_set.get_queryset|slice:":1"
+    # 获取学习用户数，此处不用统计，我们只取前5个
+    #def get_learn_users(self):
+    #    return self.usercourse_set.all()[:5]
 
     class Meta:
         verbose_name = u'课程'

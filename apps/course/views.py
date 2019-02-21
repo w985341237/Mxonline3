@@ -10,7 +10,15 @@ class CourseListView(View):
         all_courses = Course.objects.all()
 
         # 热门课程
-        hot_courses = all_courses.order_by('fav_nums')[:5]
+        hot_courses = all_courses.order_by('-students')[:2]
+
+        # 热门和参与人数排名
+        sort = request.POST.get('sort','')
+        if sort:
+            if sort == 'hot':
+                all_courses = all_courses.order_by('-click_nums')
+            if sort == 'students':
+                all_courses = all_courses.order_by('students')
 
         # 对课程进行分页，尝试获取get请求传递过来的page参数
         # 如果不合法的配置参数则默认返回第一页
@@ -19,9 +27,29 @@ class CourseListView(View):
         except PageNotAnInteger:
             page = 1
         # 这里指从all_courses取出来，每页显示2个
-        p = Paginator(all_courses, 2, request=request)
+        p = Paginator(all_courses, 9, request=request)
 
         courses = p.page(page)
 
         return render(request, 'course_list.html', {
                       'all_courses': courses, 'hot_courses': hot_courses})
+
+# 课程详情
+class CourseDetailView(View):
+    def get(self,request,course_id):
+        course = Course.objects.get(id=course_id)
+
+        # 用户查看点击查看课程详情，点击数应该+1
+        course.click_nums += 1
+        course.save()
+
+        # 相关课程推荐
+        # 去除当前课程的标签
+        tag = course.tag
+        if tag:
+            # 这里索引必须从1开始，否则会推荐自己
+            relate_courses = Course.objects.filter(tag=tag)[1:3]
+        else:
+            relate_courses = []
+
+        return render(request,'course_detail.html',{'course':course,'relate_courses':relate_courses})
