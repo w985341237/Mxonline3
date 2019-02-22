@@ -68,3 +68,7 @@ class CourseDetailView(View):
             relate_courses = []
 
         return render(request,'course_detail.html',{'course':course,'relate_courses':relate_courses,'has_fav_course':has_fav_course,'has_fav_org':has_fav_org})
+
+# 课程信息
+class CourseInfoView(View):
+    pass
