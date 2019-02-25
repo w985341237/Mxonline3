@@ -1,6 +1,6 @@
 from django.db import models
 from datetime import datetime
-from organization.models import CourseOrg
+from organization.models import CourseOrg,Teacher
 # Create your models here.
 
 
@@ -40,10 +40,21 @@ class Course(models.Model):
         blank=True,
         null=True,
     )
+    # 授课教师
+    teacher = models.ForeignKey(
+        Teacher,
+        on_delete=models.CASCADE,
+        verbose_name=u'讲师',
+        blank=True,
+        null=True
+    )
     # 课程标签
     tag = models.CharField(max_length=15,verbose_name=u'课程标签',default=u'')
     # 课程类别
     category = models.CharField(max_length=20,verbose_name=u'课程类别',default=u'后端开发')
+    is_banner = models.BooleanField(default=False,verbose_name=u'是否轮播')
+    teacher_tell = models.CharField(max_length=300,verbose_name=u'老师告诉你',default=u'按时交作业，不然告家长！')
+    you_need_know = models.CharField(max_length=300,default=u'勤学苦练',verbose_name=u'课程须知')
 
     # 替代标签：course.lesson_set.count
     # 获取课程章节数
@@ -54,6 +65,10 @@ class Course(models.Model):
     # 获取学习用户数，此处不用统计，我们只取前5个
     #def get_learn_users(self):
     #    return self.usercourse_set.all()[:5]
+
+    # 获取课程所有章节
+    def get_course_lesson(self):
+        return self.lesson_set.all()
 
     class Meta:
         verbose_name = u'课程'
@@ -75,6 +90,10 @@ class Lesson(models.Model):
         on_delete=models.CASCADE
     )
     add_time = models.DateTimeField(default=datetime.now, verbose_name=u'添加时间')
+
+    # 获取章节视频信息
+    def get_lesson_video(self):
+        return self.video_set.all()
 
     class Meta:
         verbose_name = u'章节'
