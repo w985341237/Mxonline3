@@ -82,6 +82,18 @@ class CourseDetailView(View):
 class CourseInfoView(View):
     def get(self, request, course_id):
         course = Course.objects.get(pk=course_id)
+        all_resources = CourseResource.objects.filter(course=course)
+
+        # 取出所有选过这门课的学生
+        user_courses = UserCourse.objects.filter(course=course)
+        # 取出所有选过这门课的学生的id，采用递归表达式形式
+        user_ids = [user_course.user_id for user_course in user_courses]
+        # 取出刚才那些学生选过的所有课程
+        all_user_courses = UserCourse.objects.filter(user_id__in=user_ids)
+        # 取出刚才那些学生选过的所有的课程的id,同样采用递归的表达式形式
+        course_ids = [all_user_course.course_id for all_user_course in all_user_courses]
+        # 取出学过该课程用户学过的其他课程
+        relate_courses = Course.objects.filter(id__in=course_ids).order_by('-click_nums')
 
         if request.user.is_authenticated:
             user_course = course.usercourse_set.filter(user=request.user,course=course)
@@ -132,7 +144,7 @@ class AddCommentView(View):
             course_comments = CourseComments()
             # get方法只能取出一条数据，如果有多条则抛出异常而且没有数据也抛异常
             # filter方法可以取一个列表出来（可以遍历的queryset），没有数据返回空的queryset，是不会抛异常的
-            course = Course.objects.filter(pk=course_id)
+            course = Course.objects.get(pk=course_id)
             course_comments.course = course
             course_comments.comments = comments
             course_comments.user = request.user
@@ -140,3 +152,9 @@ class AddCommentView(View):
             return HttpResponse("{'status':'success,'msg':'评论成功}",content_type='application/json')
         else:
             return HttpResponse("{'status':'fail','msg':'评论失败'}",content_type='application/json')
+
+
+# 视频播放
+
+class VideoPlayView(View):
+    pass

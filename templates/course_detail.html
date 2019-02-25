@@ -39,7 +39,7 @@
                             <li><span class="parm word3">课程类别：</span><span title="">{{ course.category }}</span></li>
                             <li><span class="parm word4">学习用户：</span>
                                 {% for user_course in course.usercourse_set.get_queryset|slice:":5" %}
-
+                                    <span class="pic"><img src="{{ MEDIA_URL }}{{ user_course.user.image }}" width="40" height="40"></span>
                                 {% endfor %}
                             </li>
                         </ul>

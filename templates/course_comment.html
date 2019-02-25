@@ -72,7 +72,7 @@
                         <div class="wgt-ipt-wrap pub-editor-wrap" id="js-pl-input-fake">
                             <textarea id="js-pl-textarea" class="" placeholder="扯淡、吐槽、表扬、鼓励，说啥都行！"></textarea>
                         </div>
-                        <input type="button" id="js-pl-submit" class="pub-btn" data-cid="452" value="发表评论">
+                        <input type="button" id="js-pl-submit" class="pub-btn" data-cid="452" value="发表评论" onclick="window.location.reload()">
                         <p class="global-errortip js-global-error"></p>
                     </div>
                     <div id="course_note">
@@ -191,7 +191,7 @@
             success:function (data) {
                 if(data.status == 'fail'){
                     if(data.msg == '用户未登录'){
-                        window.location.href={% url 'login' %}
+                        window.location.href="{% url 'login' %}";
                     }else{
                         alert(data.msg)
                     }
