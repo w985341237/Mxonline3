@@ -229,3 +229,23 @@ class AddFavView(View):
             else:
                 # 收藏出错
                 return HttpResponse({'status':'fail','msg':'收藏出错'},content_type='application/json')
+
+
+# 教师列表
+
+class TeacherListView(View):
+    def get(self,request):
+        all_teacher = Teacher.objects.all()
+        teacher_nums = all_teacher.count()
+
+        # 对课程机构进行分页，尝试获取前端get请求传递过来的page参数
+        # 如果是不合法的配置参数则默认返回第一页
+        try:
+            page = request.GET.get('page', 1)
+        except PageNotAnInteger:
+            page = 1
+        # 这里指从all_teachers中取出来，每页显示6个，这个字段必填
+        p = Paginator(all_teacher, 6, request=request)
+        teachers = p.page(page)
+
+        return render(request,'teacher_list.html',{'all_teacher':teachers,'teacher_nums':teacher_nums})

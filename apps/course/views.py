@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic import View
-from course.models import Course, CourseResource
+from course.models import Course, CourseResource,Video
 from operation.models import UserCourse, CourseComments
 from pure_pagination import PageNotAnInteger, Paginator, EmptyPage
 from operation.models import UserFavorite
@@ -179,4 +179,24 @@ class AddCommentView(View):
 # 视频播放
 
 class VideoPlayView(View):
-    pass
+    login_url = '/login/'
+    redirect_field_name = 'redirect_to'
+
+    def get(self,request,video_id):
+        video = Video.objects.get(pk=video_id)
+        course = video.lesson.course
+
+        # 取出所有选过这门课的学生
+        user_courses = UserCourse.objects.filter(course=course)
+        # 取出所有选过这门课的学生的id，采用递归表达式形式
+        user_ids = [user_course.user_id for user_course in user_courses]
+        # 取出刚才那些学生选过的所有课程
+        all_user_courses = UserCourse.objects.filter(user_id__in=user_ids)
+        # 取出刚才那些学生选过的所有的课程的id,同样采用递归的表达式形式
+        course_ids = [
+            all_user_course.course_id for all_user_course in all_user_courses]
+        # 取出学过该课程用户学过的其他课程
+        relate_courses = Course.objects.filter(
+            id__in=course_ids).order_by('-click_nums')
+
+        return render(request,'course_play.html',{'video':video,'course':course,'relate_courses':relate_courses})

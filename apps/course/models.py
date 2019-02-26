@@ -115,13 +115,16 @@ class Video(models.Model):
     )
     name = models.CharField(max_length=100, verbose_name='视频名称')
     add_time = models.DateTimeField(default=datetime.now, verbose_name=u'添加时间')
+    url = models.CharField(max_length=200,default='http://blog.wangning.cn/',verbose_name=u'访问地址')
+    # 使用分钟做后台记录（存储最小单位）前台转换
+    learn_times = models.IntegerField(default=0,verbose_name=u'学习时长（分钟数）')
 
     class Meta:
         verbose_name = u'视频'
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.name
+        return '{0}章节的视频：{1}'.format(self.lesson,self.name)
 
 # 课程资源
 
@@ -149,4 +152,4 @@ class CourseResource(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.name
+        return '《{0}》课程的资源:{1}'.format(self.course,self.name)

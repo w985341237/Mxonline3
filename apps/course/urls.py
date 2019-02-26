@@ -11,5 +11,5 @@ urlpatterns = [
     path('info/<int:course_id>/',CourseInfoView.as_view(),name='course_info'),
     path('comments/<int:course_id>/',CourseCommentView.as_view(),name='course_comments'),
     path('add_comment/',AddCommentView.as_view(),name='add_comment'),
-    path('video_play/<int:video_id>/',VideoPlayView.as_view(),name='video_play')
+    path('video/<int:video_id>/',VideoPlayView.as_view(),name='video_play'),
 ]

@@ -68,7 +68,7 @@
                                 <ul class="video">
                                     {% for video in lesson.video_set.get_queryset %}
                                         <li>
-                                            <a target="_blank" href="{% url 'course:video_play' video_id %}" class="J-media-item studyvideo">
+                                            <a target="_blank" href="{% url 'course:video_play' video.id %}" class="J-media-item studyvideo">
                                                 {{ video.name }}({{ video.learn_times }})<i class="study-state"></i>
                                             </a>
                                         </li>
@@ -116,11 +116,35 @@
                             </div>
                         </div>
                         <div class="cp-other-learned js-comp-tabs">
+                            <div class="cp-header clearfix">
+                                <h2 class="cp-tit l">该课的同学还学过</h2>
+                            </div>
+                            <div class="cp-body">
+                                <div class="cp-tab-pannel js-comp-tab-pannel" data-pannel="course" style="display:block">
+                                    <!-- img 200*112 -->
+                                    <ul class="other-list">
+                                        {% for relate_course in relate_courses %}
+                                            <li class="curr">
+                                                <a href="{% url 'course:course_detail' relate_course.id %}" target="_blank">
+                                                    <img src="{{ MEDIA_URL }}{{ relate_course.image }}" alt="{{ relate_course.name }}">
+                                                    <span class="name autowrap">{{ relate_course.name }}</span>
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                <div class="cp-tab-pannel js-comp-tab-pannel" data-pannel="plan">
+                                    <ul class="other-list">
 
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="clear"></div>
         </div>
     </div>
 </div>
+{% endblock %}
