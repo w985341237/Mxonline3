@@ -1,6 +1,6 @@
 from django.urls import path,re_path
 from django.views.generic import TemplateView
-from organization.views import OrgView,OrgHomeView,AddAskView,OrgTeacherView,OrgCourseView,OrgDescView,AddFavView,TeacherListView
+from organization.views import OrgView,OrgHomeView,AddAskView,OrgTeacherView,OrgCourseView,OrgDescView,AddFavView,TeacherListView,TeacherDetailView
 
 app_name = 'organization'
 
@@ -20,7 +20,7 @@ urlpatterns = [
     # 我要学习
     path('add_ask/',AddAskView.as_view(),name='add_ask'),
     # 讲师详情
-    path('teacher/detail/<int:teacher_id>/',TemplateView.as_view(template_name='teacher_detail.html'),name='teacher_detail'),
+    path('teacher/detail/<int:teacher_id>/',TeacherDetailView.as_view(),name='teacher_detail'),
     # 收藏
     path('add_fav/',AddFavView.as_view(),name='add_fav')
 ]

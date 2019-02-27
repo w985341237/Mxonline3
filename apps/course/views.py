@@ -6,6 +6,7 @@ from operation.models import UserCourse, CourseComments
 from pure_pagination import PageNotAnInteger, Paginator, EmptyPage
 from operation.models import UserFavorite
 from utils.mixin_utils import LoginRequiredMixin
+from django.db.models import Q
 # Create your views here.
 
 
@@ -16,6 +17,15 @@ class CourseListView(View):
         # 热门课程
         hot_courses = all_courses.order_by('-students')[:2]
 
+        # 搜索功能
+        # nameicontains表示姓名中含有某个字段，不区分大小写，而namecontains则区分大小写。
+        # 还有我们的搜索功能必须在排序之前进行，否则就得不到我们想要的数据了
+        search_keywords = request.GET.get('keywords', '')
+        if search_keywords:
+            all_courses = all_courses.filter(
+                Q(name__icontains=search_keywords) | Q(desc__icontains=search_keywords) | Q(
+                    detail__icontains=search_keywords))
+
         # 热门和参与人数排名
         sort = request.POST.get('sort', '')
         if sort:
@@ -23,6 +33,7 @@ class CourseListView(View):
                 all_courses = all_courses.order_by('-click_nums')
             if sort == 'students':
                 all_courses = all_courses.order_by('students')
+
 
         # 对课程进行分页，尝试获取get请求传递过来的page参数
         # 如果不合法的配置参数则默认返回第一页
@@ -36,7 +47,7 @@ class CourseListView(View):
         courses = p.page(page)
 
         return render(request, 'course_list.html', {
-                      'all_courses': courses, 'hot_courses': hot_courses})
+                      'all_courses': courses, 'hot_courses': hot_courses,'search_keywords':search_keywords})
 
 # 课程详情
 

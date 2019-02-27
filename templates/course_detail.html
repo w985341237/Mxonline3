@@ -44,7 +44,7 @@
                             </li>
                         </ul>
                         <div class="btns">
-                            <div class="btn colectgroupbtn" id="jsLeftBtn" onclick="window.location.reload()">
+                            <div class="btn colectgroupbtn" id="jsLeftBtn">
                                 {% if has_fav_course %}
                                     已收藏
                                 {% else %}
@@ -79,7 +79,7 @@
                     <a href="{% url 'org:org_home' course.course_org.id %}">
                         <h2 class="center" title="清华大学">{{ course.course_org.name }}</h2>
                     </a>
-                    <div class="btn notlogin" data-favid="14" id="jsRightBtn" onclick="window.location.reload()">
+                    <div class="btn notlogin" data-favid="14" id="jsRightBtn">
                         {% if has_fav_org %}
                             已收藏
                         {% else %}

@@ -10,7 +10,7 @@
     <div class="wp">
         <div class="crumbs">
             <ul>
-                <li><a href="{% url 'login' %}">首页</a>></li>
+                <li><a href="{% url 'index' %}">首页</a>></li>
                 <li>授课教师</li>
             </ul>
         </div>
@@ -71,7 +71,7 @@
                         <li class="long"><a href="?{{ all_teacher.previous_page_number.querystring }}">上一页</a></li>
                     {% endif %}
                     {% for page in all_teacher.pages %}
-                        {% if pages %}
+                        {% if page %}
                             {% ifequal page all_teacher.number  %}
                                 <li class="active"><a href="?{{ page.querystring }}">{{ page }}</a></li>
                             {% else %}
