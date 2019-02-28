@@ -7,6 +7,8 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.backends import ModelBackend
 from .models import UserProfile, EmailVerifyRecord,Banner
+from course.models import Course
+from organization.models import CourseOrg
 # 并集运算
 from django.db.models import Q
 
@@ -14,6 +16,7 @@ from django.db.models import Q
 from django.views.generic.base import View
 from .forms import LoginForm, RegisterForm, ActiveForm,ForgetForm,ModifyPwdForm
 from utils.email_send import send_register_email
+from utils.mixin_utils import LoginRequiredMixin
 
 # Create your views here.
 os.environ.setdefault('DJANGO_SETTING_MODULE', 'Mxonline3.settings')
@@ -210,4 +213,70 @@ class ModifyPwdView(View):
 class IndexView(View):
     def get(self,request):
         all_banner = Banner.objects.all()
-        return render(request,'index.html',{'all_banner':all_banner})
+        banner_courses = Course.objects.filter(is_banner=True)
+        courses = Course.objects.all()
+        course_orgs = CourseOrg.objects.all()
+        return render(request,'index.html',{'all_banner':all_banner,'banner_courses':banner_courses,'courses':courses,'course_orgs':course_orgs})
+
+
+# 个人信息
+
+class UserInfoView(View):
+    login_url = '/login/'
+    redirect_field_name = 'next'
+
+    def get(self,request):
+        return render(request,'usercenter_info.html',{})
+
+class MyCourseView(View):
+    login_url = '/login/'
+    redirect_field_name = 'next'
+
+    def get(self,request):
+        return render(request,'usercenter_mycourse.html')
+
+
+class MyFavOrgView(View):
+    login_url = '/login/'
+    redirect_field_name = 'next'
+
+    def get(self, request):
+        return render(request, 'usercenter_myfav_org.html')
+
+
+class MyMessageView(View):
+    login_url = '/login/'
+    redirect_field_name = 'next'
+
+    def get(self, request):
+        return render(request, 'usercenter_my_message.html')
+
+class UploadImageView(View):
+    login_url = '/login/'
+    redirect_field_name = 'next'
+
+    def get(self, request):
+        pass
+
+class UpdatePwdView(View):
+    login_url = '/login/'
+    redirect_field_name = 'next'
+
+    def get(self, request):
+        pass
+
+
+class SendMailCodeView(View):
+    login_url = '/login/'
+    redirect_field_name = 'next'
+
+    def get(self, request):
+        pass
+
+
+class UpdateEmailView(View):
+    login_url = '/login/'
+    redirect_field_name = 'next'
+
+    def get(self, request):
+        pass

@@ -187,7 +187,7 @@ class AddFavView(View):
         if not request.user.is_authenticated:
             # 未登录时提示未登录，并跳转到登录界面
             return HttpResponse(
-                "{'status': 'fail', 'msg': '用户还未登陆'}", content_type='application/json')
+                '{"status": "fail", "msg": "用户还未登陆"}', content_type="application/json")
         exist_records = UserFavorite.objects.filter(
             user=request.user, fav_id=int(fav_id), fav_type=int(fav_type))
         if exist_records:
@@ -213,8 +213,9 @@ class AddFavView(View):
                     teacher.fav_nums = 0
                 teacher.save()
 
+            # 注意：json里要用""，如果用''会解析错误，前端ajax程序执行失败
             return HttpResponse(
-                "{'status': 'success', 'msg': '收藏'}", content_type='application/json')
+                '{"status": "success", "msg": "收藏"}', content_type="application/json")
         else:
             # 实例化一个对象
             user_fav = UserFavorite()
@@ -242,11 +243,11 @@ class AddFavView(View):
                     teacher.save()
 
                 return HttpResponse(
-                    "{'status': 'success', 'msg': '已收藏'}", content_type='application/json')
+                    '{"status": "success", "msg": "已收藏"}', content_type="application/json")
             else:
                 # 收藏出错
                 return HttpResponse(
-                    "{'status': 'fail', 'msg': '收藏出错'}", content_type='application/json')
+                    '{"status": "fail", "msg": "收藏出错"}', content_type='application/json')
 
 
 # 教师列表

@@ -1,0 +1,21 @@
+{% extends 'usercenter_base.html' %}
+
+{% block title %}我的收藏 | wangning慕课小站{% endblock %}
+
+{% load staticfiles %}
+
+{% block custom_bread %}
+<section>
+    <div class="wp">
+        <ul class="crumbs">
+            <li><a href="{% url 'index' %}">首页</a>></li>
+            <li><a href="{% url 'users:user_info' %}">个人中心</a>></li>
+            <li>我的收藏</li>
+        </ul>
+    </div>
+</section>
+{% endblock %}
+
+{% block right_content %}
+
+{% endblock %}
