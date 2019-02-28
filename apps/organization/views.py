@@ -7,6 +7,7 @@ from operation.models import UserFavorite
 from pure_pagination import Paginator, PageNotAnInteger
 from organization.forms import UserAskForm
 from django.db.models import Q
+import json
 # Create your views here.
 
 # 课程机构列表功能
@@ -187,7 +188,7 @@ class AddFavView(View):
         if not request.user.is_authenticated:
             # 未登录时提示未登录，并跳转到登录界面
             return HttpResponse(
-                "{'status': 'fail', 'msg': '用户还未登陆'}", content_type='application/json')
+                "{'status': 'fail', 'msg': '用户还未登陆'}", content_type='application/json;charset=utf-8')
         exist_records = UserFavorite.objects.filter(
             user=request.user, fav_id=int(fav_id), fav_type=int(fav_type))
         if exist_records:
@@ -214,7 +215,7 @@ class AddFavView(View):
                 teacher.save()
 
             return HttpResponse(
-                "{'status': 'success', 'msg': '收藏'}", content_type='application/json')
+                "{'status': 'success', 'msg': '收藏'}", content_type='application/json;charset=utf-8')
         else:
             # 实例化一个对象
             user_fav = UserFavorite()
@@ -242,11 +243,11 @@ class AddFavView(View):
                     teacher.save()
 
                 return HttpResponse(
-                    "{'status': 'success', 'msg': '已收藏'}", content_type='application/json')
+                    "{'status': 'success', 'msg': '已收藏'}", content_type='application/json;charset=utf-8')
             else:
                 # 收藏出错
                 return HttpResponse(
-                    "{'status': 'fail', 'msg': '收藏出错'}", content_type='application/json')
+                    "{'status': 'fail', 'msg': '收藏出错'}", content_type='application/json;charset=utf-8')
 
 
 # 教师列表
