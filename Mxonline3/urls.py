@@ -45,7 +45,7 @@ urlpatterns = [
     # 修改密码
     path('modify_pwd/',ModifyPwdView.as_view(),name='modify_pwd'),
     path('users/', include('users.urls')),
-    path('courses/', include('course.urls')),
+    path('course/', include('course.urls')),
     path('org/', include('organization.urls',namespace='org')),
     path('captcha/', include('captcha.urls')),
     # 激活用户url，利用正则表达式提取激活码

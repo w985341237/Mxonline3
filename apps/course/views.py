@@ -41,7 +41,7 @@ class CourseListView(View):
             page = request.GET.get('page', 1)
         except PageNotAnInteger:
             page = 1
-        # 这里指从all_courses取出来，每页显示2个
+        # 这里指从all_courses取出来，每页显示9个
         p = Paginator(all_courses, 9, request=request)
 
         courses = p.page(page)
@@ -141,7 +141,7 @@ class CourseCommentView(LoginRequiredMixin, View):
 
     def get(self, request, course_id):
         course = Course.objects.get(pk=course_id)
-        all_comments = CourseComments.objects.all()
+        all_comments = CourseComments.objects.all().order_by('-add_time')
         all_recources = CourseResource.objects.filter(course=course)
 
         # 取出所有选过这门课的学生
@@ -157,8 +157,17 @@ class CourseCommentView(LoginRequiredMixin, View):
         relate_courses = Course.objects.filter(
             id__in=course_ids).order_by('-click_nums')
 
+        # 这里的分页最好是动态加载的，暂时先不动
+        try:
+            page = request.GET.get('page',1)
+        except PageNotAnInteger:
+            page = 1
+        p = Paginator(all_comments,5,request=request)
+
+        comments = p.page(page)
+
         return render(request, 'course_comment.html', {
-                      'course': course, 'all_comments': all_comments,
+                      'course': course, 'all_comments': comments,
                       'all_resources': all_recources, 'relate_courses': relate_courses})
 
 # 增加课程评论
@@ -168,7 +177,7 @@ class AddCommentView(View):
     def post(self, request):
         if not request.user.is_authenticated:
             return HttpResponse(
-                "{'status':'fail','msg':'用户未登录'}", content_type='application/json')
+                '{"status":"fail","msg":"用户未登录"}', content_type="application/json")
         course_id = request.POST.get('course_id', 0)
         comments = request.POST.get('comments', '')
         if int(course_id) > 0 and comments:
@@ -181,10 +190,10 @@ class AddCommentView(View):
             course_comments.user = request.user
             course_comments.save()
             return HttpResponse(
-                "{'status':'success,'msg':'评论成功}", content_type='application/json')
+                '{"status":"success","msg":"评论成功"}', content_type="application/json")
         else:
             return HttpResponse(
-                "{'status':'fail','msg':'评论失败'}", content_type='application/json')
+                '{"status":"fail","msg":"评论失败"}', content_type="application/json")
 
 
 # 视频播放
