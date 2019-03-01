@@ -104,6 +104,9 @@ $(function(){
                     Dml.fun.showValidateError($("#pwd"), data.msg);
                     Dml.fun.showValidateError($("#repwd"), data.msg);
                 }
+            },
+            fail:function () {
+                alert("ajax执行失败")
             }
         });
     });

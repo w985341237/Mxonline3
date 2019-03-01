@@ -25,6 +25,7 @@
 			<div class="inforcon">
 				<div class="left" style="width:242px;">
                     <iframe id='frameFile' name='frameFile' style='display: none;'></iframe>
+                    <!-- 注意：enctype的值必须为multipart/form-data，提交类型为文件（type="file"）只有满足这两个条件才能把文件类型传递到后台并进行存储！ -->
                     <form class="clearfix" id="jsAvatarForm" enctype="multipart/form-data" autocomplete="off" method="post" action="{% url 'users:image_upload' %}" target='frameFile'>
                         <label class="changearea" for="avatarUp">
                             <span id="avatardiv" class="pic">

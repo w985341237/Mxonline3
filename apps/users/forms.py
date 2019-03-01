@@ -1,6 +1,7 @@
 from django import forms
 # 引入验证码field
 from captcha.fields import CaptchaField
+from users.models import UserProfile
 
 # 登录表单验证
 
@@ -37,3 +38,30 @@ class ForgetForm(forms.Form):
 class ModifyPwdForm(forms.Form):
     password1 = forms.CharField(required=True,min_length=5)
     password2 = forms.CharField(required=True,min_length=5)
+
+# 修改个人信息
+class UserInfoForm(forms.Form):
+    nick_name = forms.CharField(required=True,min_length=5,max_length=50)
+    birthday = forms.DateField(required=True)
+    gender = forms.CharField(required=True,min_length=2)
+    address = forms.CharField(required=True,min_length=5,max_length=100)
+    mobile = forms.CharField(required=True,min_length=11,max_length=11)
+    email = forms.EmailField(required=True)
+
+# 用户头像修改
+class ImageUploadForm(forms.ModelForm):
+    # 除了继承现有字段，还可新增字段
+    class Meta:
+        model = UserProfile
+        # 自定义需要验证的字段
+        fields = ["image"]
+
+# 邮箱验证码
+class EmailCodeForm(forms.Form):
+    email = forms.EmailField(required=True)
+
+
+# 修改邮箱
+class UpdateEmailForm(forms.Form):
+    email = forms.EmailField(required=True)
+    mailcode = forms.CharField(required=True,min_length=8,max_length=8)

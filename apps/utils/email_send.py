@@ -54,3 +54,20 @@ def send_register_email(email,send_type='register'):
         send_status = send_mail(email_title,email_body,EMAIL_FROM,[email])
         if send_status:
             pass
+
+# 发送修改密码邮件
+def send_update_email_email(email,send_type='update_email'):
+    email_record = EmailVerifyRecord()
+
+    code = random_str()
+    email_record.code = code
+    email_record.email =email
+    email_record.send_type = send_type
+
+    if send_type == 'update_email':
+        email_title = 'wangning慕课小站 修改密码验证码'
+        email_body = '您的验证码为{0}'.format(code)
+
+        send_status = send_mail(email_title,email_body,EMAIL_FROM,[email])
+        if send_status:
+            pass

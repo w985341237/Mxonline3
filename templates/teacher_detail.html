@@ -173,6 +173,9 @@ function add_fav(current_elem, fav_id, fav_type){
                 current_elem.text(data.msg)
             }
         },
+        error:function () {
+                alert("服务器请求超时,请重试!")
+            }
     });
 }
 
