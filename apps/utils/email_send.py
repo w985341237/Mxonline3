@@ -47,26 +47,19 @@ def send_register_email(email,send_type='register'):
         if send_status:
             pass
 
+    # 登录页忘记密码
     elif send_type == 'forget':
         email_title = 'wangning慕课小站 重置密码链接'
         email_body = '请点击下面的链接重置你的密码：http://127.0.0.1:8000/reset/{0}'.format(code)
 
-        send_status = send_mail(email_title,email_body,EMAIL_FROM,[email])
+        send_status = send_mail(email_title, email_body, EMAIL_FROM, [email])
         if send_status:
             pass
 
-# 发送修改密码邮件
-def send_update_email_email(email,send_type='update_email'):
-    email_record = EmailVerifyRecord()
-
-    code = random_str()
-    email_record.code = code
-    email_record.email =email
-    email_record.send_type = send_type
-
-    if send_type == 'update_email':
+    # 个人中心修改密码
+    elif send_type == 'update_email':
         email_title = 'wangning慕课小站 修改密码验证码'
-        email_body = '您的验证码为{0}'.format(code)
+        email_body = '您的验证码为: http://127.0.0.1:8000/reset/{0}'.format(code)
 
         send_status = send_mail(email_title,email_body,EMAIL_FROM,[email])
         if send_status:

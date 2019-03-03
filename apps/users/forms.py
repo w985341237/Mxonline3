@@ -40,13 +40,10 @@ class ModifyPwdForm(forms.Form):
     password2 = forms.CharField(required=True,min_length=5)
 
 # 修改个人信息
-class UserInfoForm(forms.Form):
-    nick_name = forms.CharField(required=True,min_length=5,max_length=50)
-    birthday = forms.DateField(required=True)
-    gender = forms.CharField(required=True,min_length=2)
-    address = forms.CharField(required=True,min_length=5,max_length=100)
-    mobile = forms.CharField(required=True,min_length=11,max_length=11)
-    email = forms.EmailField(required=True)
+class UserInfoForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ["nick_name","birthday","gender","address","mobile"]
 
 # 用户头像修改
 class ImageUploadForm(forms.ModelForm):
@@ -64,4 +61,4 @@ class EmailCodeForm(forms.Form):
 # 修改邮箱
 class UpdateEmailForm(forms.Form):
     email = forms.EmailField(required=True)
-    mailcode = forms.CharField(required=True,min_length=8,max_length=8)
+    emailcode = forms.CharField(required=True,min_length=8,max_length=8)

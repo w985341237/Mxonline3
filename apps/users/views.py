@@ -15,7 +15,7 @@ from django.db.models import Q
 # 基于类实现需要继承的View
 from django.views.generic.base import View
 from .forms import LoginForm, RegisterForm, ActiveForm, ForgetForm, ModifyPwdForm, UserInfoForm, ImageUploadForm,UpdateEmailForm
-from utils.email_send import send_register_email,send_update_email_email
+from utils.email_send import send_register_email
 from utils.mixin_utils import LoginRequiredMixin
 from django.http import HttpResponse
 
@@ -228,7 +228,7 @@ class IndexView(View):
                       'all_banner': all_banner, 'banner_courses': banner_courses, 'courses': courses, 'course_orgs': course_orgs})
 
 
-# 个人信息
+# 个人中心修改信息
 
 class UserInfoView(LoginRequiredMixin, View):
     login_url = '/login/'
@@ -238,31 +238,13 @@ class UserInfoView(LoginRequiredMixin, View):
         return render(request, 'usercenter_info.html', {})
 
     def post(self, request):
-        pass
-        '''
-        user_id = request.user.id
+        info_form = UserInfoForm(request.POST,instance=request.user)
+        if info_form.is_valid():
+            info_form.save()
+            return HttpResponse('{"status":"success"}',content_type='application/json')
+        else:
+            return HttpResponse('{"status":"failure","msg":"个人信息填写错误"}',content_type='application/json')
 
-        userinfo = UserInfoForm(request.POST)
-        if userinfo.is_valid():
-            user = UserProfile.objects.get(pk=user_id)
-            nick_name = request.POST.get('nick_name','')
-            birthday = request.POST.get('birthday','')
-            gender = request.POST.get('gender','')
-            address = request.POST.get('address','')
-            mobile = request.POST.get('mobile','')
-            email = request.POST.get('email','')
-
-            user.nick_name=nick_name
-            user.birthday=birthday
-            user.gender=gender
-            user.address=address
-            user.mobile=mobile
-            user.email=email
-
-            user.save()
-
-        return render(request,'usercenter_info.html')
-        '''
 
 
 class MyCourseView(LoginRequiredMixin, View):
@@ -288,7 +270,7 @@ class MyMessageView(LoginRequiredMixin, View):
     def get(self, request):
         return render(request, 'usercenter_my_message.html')
 
-
+# 个人中心修改头像
 class UploadImageView(LoginRequiredMixin, View):
     login_url = '/login/'
     redirect_field_name = 'next'
@@ -303,7 +285,7 @@ class UploadImageView(LoginRequiredMixin, View):
         return HttpResponse('{"status":"fail"}',
                             content_type="application/json")
 
-
+# 个人中心修改密码
 class UpdatePwdView(View):
 
     def post(self, request):
@@ -323,21 +305,36 @@ class UpdatePwdView(View):
             return HttpResponse('{"status":"fail","msg":"密码填写错误！', content_type="application/json")
 
 
+# 个人中心修改邮箱发送验证码
+class SendMailCodeView(LoginRequiredMixin,View):
+    login_url = '/login/'
+    redirect_field_name = 'next'
 
-class SendMailCodeView(View):
+    def get(self,request):
+        email = request.GET.get('email','')
+        if UserProfile.objects.filter(email=email):
+            return HttpResponse('{"status":"fail","msg":"该邮箱已经被注册"}', content_type='application/json')
+        else:
+            send_register_email(email,send_type='update_email')
+            return HttpResponse('{"status":"success","msg":"邮件已发送"}',content_type='application/json')
 
-    def post(self, request):
-        email_form = UpdateEmailForm(request.POST)
-        if email_form.is_valid():
-            pass
 
-
-
-
+# 个人中心修改邮箱
 class UpdateEmailView(LoginRequiredMixin, View):
     login_url = '/login/'
     redirect_field_name = 'next'
 
     def post(self, request):
-        # email_form = UpdateEmailForm(request.POST)
-        pass
+        email = request.POST.get('email','')
+        email_code = request.POST.get('code','')
+
+        # 验证输入的验证码与发送的验证是否一致
+        existed_records = EmailVerifyRecord.objects.filter(send_type='update_email',email=email,code=email_code)
+        if existed_records:
+            user = request.user
+            user.email = email
+            user.save()
+            return HttpResponse('{"status":"success"}',content_type='application/json')
+        else:
+            return HttpResponse('{"email":"验证码错误"}', content_type='application/json')
+

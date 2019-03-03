@@ -13,6 +13,6 @@ urlpatterns = [
     path('my_message/',MyMessageView.as_view(),name='my_message'),
     path('image/upload/',UploadImageView.as_view(),name='image_upload'),
     path('update/pwd/',UpdatePwdView.as_view(),name='update_pwd'),
-    path('sendmail_code/',SendMailCodeView.as_view(),name='sendmail_code'),
+    path('sendemail_code/',SendMailCodeView.as_view(),name='sendemail_code'),
     path('update_email/',UpdateEmailView.as_view(),name='update_email')
 ]

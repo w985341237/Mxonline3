@@ -58,7 +58,7 @@ class EmailVerifyRecord(models.Model):
     email = models.EmailField(max_length=50, verbose_name=u'邮箱')
     send_type = models.CharField(
         choices=SEND_CHOICES,
-        max_length=10,
+        max_length=15,
         verbose_name=u'发送类型'
     )
     # 这里的now得去掉()，不去掉会根据编译时间，而不是根据实例化时间
