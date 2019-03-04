@@ -83,6 +83,7 @@
                             <div class="unslider-arrow2 next"></div>
                         </div>
                     {% for course in courses %}
+                        <!-- 注意：forloop.counter|add:2 是为了从第三个开始计数的，这是Django自带的功能 -->
                         <div class="module_{{ forloop.counter|add:2 }} box">
                             <a href="{% url 'course:course_detail' course.id %}">
                                 <img width="233" height="190" src="{{ MEDIA_URL }}{{ course.image }}"/>
@@ -118,6 +119,7 @@
                     <div class="right">
                         <ul>
                             {% for org in course_orgs %}
+                            <!-- 表示如果能被5整除则显示five，这也是Django自带的功能 -->
                             <li class="{% if forloop.counter|divisibleby:'5' %}five{% endif %}">
                                 <a href="{% url 'org:org_home' org.id %}">
                                     <div class="company">

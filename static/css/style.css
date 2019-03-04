@@ -3449,6 +3449,7 @@ footer .footer .line {
 
 .butler_list .cont .c7, .companyranklist .cont .c8 {
     background: url(../images/pic7.png) no-repeat left center;
+    text-indent: 20px;
 }
 
 .butler_list .cont .c8, .companyranklist .cont .c7 {

@@ -74,6 +74,9 @@ class OrgHomeView(View):
         # 根据id来获取课程机构
         course_org = CourseOrg.objects.get(id=int(org_id))
 
+        course_org.click_nums += 1
+        course_org.save()
+
         # 当前机构所有课程,取4个
         all_courses = course_org.course_set.all()[:4]
 
@@ -288,7 +291,12 @@ class TeacherListView(View):
 class TeacherDetailView(View):
     def get(self, request, teacher_id):
         teacher = Teacher.objects.get(pk=teacher_id)
+
+        teacher.click_nums += 1
+        teacher.save()
+
         all_course = Course.objects.filter(teacher=teacher)
+        # 讲师排行，取前三
         rank_teacher = Teacher.objects.all().order_by('-click_nums')[:3]
 
         has_fav_teacher = False

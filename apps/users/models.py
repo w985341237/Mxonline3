@@ -36,6 +36,10 @@ class UserProfile(AbstractUser):
         blank=True
     )
 
+    def unread_nums(self):
+        from operation.models import UserMessage
+        return UserMessage.objects.filter(user=self.id,has_read=False).count()
+
     # meta信息，即后台栏目名
     class Meta:
         verbose_name = '用户信息'

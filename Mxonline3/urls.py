@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 import xadmin
 from django.views.generic import TemplateView
-from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, ResetPwdView, ModifyPwdView, IndexView
+from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, ResetPwdView, ModifyPwdView, IndexView, LogoutView
 from .settings import MEDIA_ROOT
 from django.views.static import serve  # 上传媒体加载包
 
@@ -32,9 +32,7 @@ urlpatterns = [
     # 登出
     path(
         'logout/',
-        TemplateView.as_view(
-            template_name='logout.html'),
-        name='logout'),
+        LogoutView.as_view(), name='logout'),
     # 注册
     path('register/', RegisterView.as_view(), name='register'),
     # 忘记密码
@@ -43,10 +41,10 @@ urlpatterns = [
         ForgetPwdView.as_view(),
         name='forget_pwd'),
     # 修改密码
-    path('modify_pwd/',ModifyPwdView.as_view(),name='modify_pwd'),
+    path('modify_pwd/', ModifyPwdView.as_view(), name='modify_pwd'),
     path('users/', include('users.urls')),
     path('course/', include('course.urls')),
-    path('org/', include('organization.urls',namespace='org')),
+    path('org/', include('organization.urls', namespace='org')),
     path('captcha/', include('captcha.urls')),
     # 激活用户url，利用正则表达式提取激活码
     re_path(
@@ -56,5 +54,8 @@ urlpatterns = [
     # 处理图片显示的url,使用Django自带的serve
     re_path('media/(?P<path>.*)', serve, {"document_root": MEDIA_ROOT}),
     # 重置密码
-    re_path('reset/(?P<active_code>.*)/',ResetPwdView.as_view(),name='reset_pwd')
+    re_path(
+        'reset/(?P<active_code>.*)/',
+        ResetPwdView.as_view(),
+        name='reset_pwd')
 ]
