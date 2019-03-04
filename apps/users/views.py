@@ -9,6 +9,7 @@ from django.contrib.auth.backends import ModelBackend
 from .models import UserProfile, EmailVerifyRecord, Banner
 from course.models import Course
 from organization.models import CourseOrg
+from operation.models import UserCourse,UserFavorite,UserMessage
 # 并集运算
 from django.db.models import Q
 
@@ -252,7 +253,8 @@ class MyCourseView(LoginRequiredMixin, View):
     redirect_field_name = 'next'
 
     def get(self, request):
-        return render(request, 'usercenter_mycourse.html')
+        user_courses = UserCourse.objects.filter(user=request.user)
+        return render(request,'usercenter_mycourse.html',{'user_courses':user_courses})
 
 
 class MyFavOrgView(LoginRequiredMixin, View):
@@ -260,7 +262,8 @@ class MyFavOrgView(LoginRequiredMixin, View):
     redirect_field_name = 'next'
 
     def get(self, request):
-        return render(request, 'usercenter_myfav_org.html')
+        org_list = UserFavorite.objects.filter(user=request.user,fav_type=2)
+        return render(request, 'usercenter_myfav_org.html',{'org_list':org_list})
 
 
 class MyMessageView(LoginRequiredMixin, View):
