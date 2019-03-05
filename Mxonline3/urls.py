@@ -18,7 +18,7 @@ from django.urls import path, include, re_path
 import xadmin
 from django.views.generic import TemplateView
 from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, ResetPwdView, ModifyPwdView, IndexView, LogoutView
-from .settings import MEDIA_ROOT
+from .settings import MEDIA_ROOT  # ,STATIC_ROOT
 from django.views.static import serve  # 上传媒体加载包
 
 
@@ -57,5 +57,12 @@ urlpatterns = [
     re_path(
         'reset/(?P<active_code>.*)/',
         ResetPwdView.as_view(),
-        name='reset_pwd')
+        name='reset_pwd'),
+    # 配置静态文件上传的访问处理url
+    # re_path('static/(?P<path>.*)', serve, {"document_root": STATIC_ROOT})
 ]
+
+# 全局404页面配置
+handler404 = 'users.views.page_not_found'
+# 全局500页面配置
+handler500 = 'users.views.page_error'

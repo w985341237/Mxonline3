@@ -154,8 +154,9 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
+   os.path.join(BASE_DIR, 'static') # 说明静态文件放在哪个目录,记住这里只能用列表或者元组，单一一个元组需要用,结尾
 ]
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -172,9 +173,9 @@ EMAIL_FROM = '985341237@qq.com'
 # 分页设置的参数
 PAGINATION_SETTINGS = {
     # 表示总共会显示多少个页数。（包括省略号，两边和中间）
-    'PAGE_RANGE_DISPLAYED':10,
+    'PAGE_RANGE_DISPLAYED': 10,
     # 表示旁边会显示多少个
-    'MARGIN_PAGES_DISPLAYED':2,
+    'MARGIN_PAGES_DISPLAYED': 2,
     # 表示输入页不合法是否要跳到第一页
-    'SHOW_FIRST_PAGE_WHEN_INVALID':True
+    'SHOW_FIRST_PAGE_WHEN_INVALID': True
 }

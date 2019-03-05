@@ -3,17 +3,17 @@
 import django
 import os
 from django.shortcuts import render
-from django.contrib.auth import authenticate, login,logout
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.backends import ModelBackend
 from django.urls import reverse
-from django.http import HttpResponse,HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 # 并集运算
 from django.db.models import Q
 
 from .models import UserProfile, EmailVerifyRecord, Banner
 from course.models import Course
-from organization.models import CourseOrg,Teacher
+from organization.models import CourseOrg, Teacher
 from operation.models import UserCourse, UserFavorite, UserMessage
 
 # 基于类实现需要继承的View
@@ -21,7 +21,7 @@ from django.views.generic.base import View
 from .forms import LoginForm, RegisterForm, ActiveForm, ForgetForm, ModifyPwdForm, UserInfoForm, ImageUploadForm, UpdateEmailForm
 from utils.email_send import send_register_email
 from utils.mixin_utils import LoginRequiredMixin
-from pure_pagination import Paginator,PageNotAnInteger,EmptyPage
+from pure_pagination import Paginator, PageNotAnInteger, EmptyPage
 
 # Create your views here.
 os.environ.setdefault('DJANGO_SETTING_MODULE', 'Mxonline3.settings')
@@ -88,8 +88,9 @@ class LoginView(View):
 
 # 用户登出
 
+
 class LogoutView(View):
-    def get(self,request):
+    def get(self, request):
         # 采用django自带的函数完成登出功能
         logout(request)
         # 不采用之前的render，而是采用重定向返回到首页
@@ -345,19 +346,21 @@ class MyMessageView(LoginRequiredMixin, View):
         all_messages = UserMessage.objects.filter(user=request.user.id)
 
         # 进入当前页面，代表消息已读，清空未读消息
-        all_unread_messages = UserMessage.objects.filter(user=request.user.id,has_read=False)
+        all_unread_messages = UserMessage.objects.filter(
+            user=request.user.id, has_read=False)
         for unread_message in all_unread_messages:
             unread_message.has_read = True
             unread_message.save()
 
         try:
-            page = request.GET.get('page',1)
+            page = request.GET.get('page', 1)
         except PageNotAnInteger:
             page = 1
-        p = Paginator(all_messages,10,request=request)
+        p = Paginator(all_messages, 10, request=request)
         messages = p.page(page)
 
-        return render(request, 'usercenter_message.html',{'messages':messages})
+        return render(request, 'usercenter_message.html',
+                      {'messages': messages})
 
 
 # 个人中心修改头像
@@ -436,3 +439,25 @@ class UpdateEmailView(LoginRequiredMixin, View):
         else:
             return HttpResponse('{"email":"验证码错误"}',
                                 content_type='application/json')
+
+
+# 404页面对应的处理函数
+def page_not_found(request):
+    from django.shortcuts import render_to_response
+    response = render_to_response("404.html", {
+
+    })
+    # 设置request的状态码
+    response.status_code = 404
+    return response
+
+
+# 500页面对应的处理函数
+def page_error(request):
+    from django.shortcuts import render_to_response
+    response = render_to_response("500.html", {
+
+    })
+    # 设置request的状态码
+    response.status_code = 500
+    return response

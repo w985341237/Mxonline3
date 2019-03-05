@@ -14,6 +14,7 @@ from xadmin.models import Log
 
 
 class EmailVerifyRecordAdmin(object):
+    model_icon = 'fa fa-user'
     # 配置后台我们需要显示的列
     list_display = ['code', 'email', 'send_type', 'send_time']
     # 配置搜索字段，不做时间搜索
