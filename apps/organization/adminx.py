@@ -18,6 +18,9 @@ class CourseOrgAdmin(object):
         'city__name',
         'add_time']
 
+    # 搜索框，当课程数量过大时，有课程指向他，会以ajax方式加载
+    relfield_style = 'fk-ajax'
+
 
 # 讲师后台管理器
 

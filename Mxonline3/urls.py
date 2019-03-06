@@ -30,22 +30,23 @@ urlpatterns = [
     # 登录
     path('login/', LoginView.as_view(), name='login'),
     # 登出
-    path(
-        'logout/',
-        LogoutView.as_view(), name='logout'),
+    path('logout/',LogoutView.as_view(), name='logout'),
     # 注册
     path('register/', RegisterView.as_view(), name='register'),
     # 忘记密码
-    path(
-        'forget_pwd/',
-        ForgetPwdView.as_view(),
-        name='forget_pwd'),
+    path('forget_pwd/',ForgetPwdView.as_view(),name='forget_pwd'),
     # 修改密码
     path('modify_pwd/', ModifyPwdView.as_view(), name='modify_pwd'),
+    # 用户相关
     path('users/', include('users.urls')),
+    # 课程相关
     path('course/', include('course.urls')),
+    # 机构相关
     path('org/', include('organization.urls', namespace='org')),
+    # 验证码
     path('captcha/', include('captcha.urls')),
+    # 富文本编辑器
+    path('ueditor/',include('DjangoUeditor.urls')),
     # 激活用户url，利用正则表达式提取激活码
     re_path(
         'active/(?P<active_code>.*)/',

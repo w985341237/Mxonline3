@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'import_export',
     'captcha',
     'pure_pagination',
+    'DjangoUeditor',
 ]
 
 # 此处重载是为了使我们的UserProfile生效

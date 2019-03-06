@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import datetime
 from organization.models import CourseOrg,Teacher
+from DjangoUeditor.models import UEditorField
 # Create your models here.
 
 
@@ -17,8 +18,8 @@ class Course(models.Model):
         max_length=6,
         verbose_name=u'难度',
     )
-    # 后期会改用富文本
-    detail = models.TextField(verbose_name='课程详情')
+    # 使用富文本
+    detail = UEditorField(verbose_name='课程详情',width=600,height=300,imagePath='course/ueditor',filePath='course/ueditor',default='')
     # 使用分钟做后台记录（存储最小单位）前台转换
     learn_times = models.IntegerField(default=0, verbose_name=u'学习时长(分钟数）')
     # 保存学习人数：点击开始学习才算
@@ -65,6 +66,17 @@ class Course(models.Model):
     # 获取学习用户数，此处不用统计，我们只取前5个
     #def get_learn_users(self):
     #    return self.usercourse_set.all()[:5]
+
+    # 获取课程章节数
+    # def get_zj_nums(self):
+    #     return self.lesson_set.all().count()
+    # get_zj_nums.short_description = '章节数'
+
+    # def go_to(self):
+    #     from django.utils.safestring import mark_safe
+        # 如果不适用make_safe，系统会对其进行转义
+    #     return mark_safe("<a href='http://blog.licheetools.top'>跳转</>")
+    # go_to.short_description = '跳转'
 
     # 获取课程所有章节
     def get_course_lesson(self):

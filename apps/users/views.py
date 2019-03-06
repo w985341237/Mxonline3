@@ -56,7 +56,8 @@ class LoginView(View):
     def get(self, request):
         # render就是渲染html返回用户
         # render三变量：request 模板名称 一个字典鞋面传给前端的值
-        return render(request, 'login.html', {})
+        redirect_url = request.GET.get('next', '')
+        return render(request, 'login.html', {"redirect_url": redirect_url})
 
     def post(self, request):
         # 类实例化需要一个字典参数dict:request.POST就是一个QueryDict所以直接传入
@@ -77,8 +78,13 @@ class LoginView(View):
                     # 实际是对request写了一部分东西进去，然后在render的时候
                     # request是要render回去的，这些信息也就随着返回浏览器。完成登录
                     login(request, user)
-                    # 跳转到首页
-                    return render(request, 'index.html')
+                    # 跳转到首页 user request会被带回到首页
+                    # 增加重定向回原网页
+                    redirect_url = request.POST.get('next', '')
+                    if redirect_url:
+                        return HttpResponseRedirect(redirect_url)
+                    return HttpResponseRedirect(reverse('index'))
+                # 用户未激活登录
                 else:
                     return render(request, 'login.html', {'msg': '用户未激活！'})
             # 仅当用户真的密码出错时，返回错误信息
