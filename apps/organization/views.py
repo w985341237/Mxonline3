@@ -59,7 +59,7 @@ class OrgView(View):
         except PageNotAnInteger:
             page = 1
         # 这里指从all_orgs中取出来，每页显示6个，这个字段必填
-        p = Paginator(all_orgs, 2, request=request)
+        p = Paginator(all_orgs, 5, request=request)
         orgs = p.page(page)
 
         return render(request, 'org_list.html', {
